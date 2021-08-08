@@ -330,7 +330,7 @@ export class ARRAY extends Column {
   public readonly options: Options.ArrayOptions;
 
   public getDataType() {
-    return DataTypes.JSONB;
+    return DataTypes.JSON;
   }
 
   public getAttributeOptions() {
@@ -343,12 +343,16 @@ export class ARRAY extends Column {
 }
 
 export class JSON extends Column {
-  public getDataType() {
-    return DataTypes.JSONB;
-  }
 }
 
 export class JSONB extends Column {
+  public getDataType() {
+    const { database } = this.context;
+    if (database.sequelize.getDialect() === 'mysql') {
+      return DataTypes.JSON;
+    }
+    return DataTypes.JSONB;
+  }
 }
 
 export class UUID extends Column {
