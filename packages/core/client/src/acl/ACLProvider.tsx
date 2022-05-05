@@ -147,7 +147,18 @@ export const ACLActionProvider = (props) => {
 };
 
 export const ACLCollectionFieldProvider = (props) => {
-  return <>{props.children}</>;
+  const fieldSchema = useFieldSchema();
+  const ctx = useContext(ACLActionParamsContext);
+  const { allowAll, allowConfigure, getActionParams } = useACLRoleContext();
+  const collectionField = fieldSchema['x-collection-field'];
+  if (!collectionField || allowAll || allowConfigure) {
+    return <>{props.children}</>;
+  }
+  const [, name] = collectionField.split('.');
+  if (!ctx?.fields?.length || ctx?.fields?.includes(name)) {
+    return <>{props.children}</>;
+  }
+  return null;
 };
 
 export const ACLMenuItemProvider = (props) => {

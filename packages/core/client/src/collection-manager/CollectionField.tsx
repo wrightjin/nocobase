@@ -2,7 +2,7 @@ import { Field } from '@formily/core';
 import { connect, useField, useFieldSchema } from '@formily/react';
 import { merge } from '@formily/shared';
 import React, { useEffect } from 'react';
-import { useCompile, useComponent, useFormBlockContext } from '..';
+import { ACLCollectionFieldProvider, useCompile, useComponent, useFormBlockContext } from '..';
 import { CollectionFieldProvider } from './CollectionFieldProvider';
 import { useCollectionField } from './hooks';
 
@@ -68,7 +68,9 @@ export const CollectionField = connect((props) => {
   const fieldSchema = useFieldSchema();
   return (
     <CollectionFieldProvider name={fieldSchema.name}>
-      <InternalField {...props} />
+      <ACLCollectionFieldProvider>
+        <InternalField {...props} />
+      </ACLCollectionFieldProvider>
     </CollectionFieldProvider>
   );
 });

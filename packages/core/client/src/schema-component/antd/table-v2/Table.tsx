@@ -8,7 +8,7 @@ import React from 'react';
 import ReactDragListView from 'react-drag-listview';
 import { useTranslation } from 'react-i18next';
 import { DndContext } from '../..';
-import { RecordIndexProvider, RecordProvider, useSchemaInitializer } from '../../../';
+import { RecordIndexProvider, RecordProvider, useDesignable, useSchemaInitializer } from '../../../';
 
 const isColumnComponent = (schema: Schema) => {
   return schema['x-component']?.endsWith('.Column') > -1;
@@ -18,6 +18,7 @@ const useTableColumns = () => {
   const start = Date.now();
   const field = useField<ArrayField>();
   const schema = useFieldSchema();
+  const { designable } = useDesignable();
   const { exists, render } = useSchemaInitializer(schema['x-initializer']);
   const columns = schema
     .reduceProperties((buf, s) => {
@@ -44,7 +45,7 @@ const useTableColumns = () => {
         },
       } as TableColumnProps<any>;
     });
-  if (!exists) {
+  if (!exists || !designable) {
     return columns;
   }
   return columns.concat({
