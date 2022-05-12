@@ -3,7 +3,7 @@ name: vercel
 on: 
   push:
     branches:
-      - develop
+      - '0.5'
 
 jobs:
   deploy:
