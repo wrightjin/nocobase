@@ -5,20 +5,26 @@ import { connect, mapProps, mapReadPretty, useField, useFieldSchema, useFormEffe
 import { isValid } from '@formily/shared';
 import { useRecord } from '@nocobase/client';
 import { Button, Input, Popover, Tag, Menu, Dropdown } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import ContentEditable from 'react-contenteditable';
 import { useTranslation } from 'react-i18next';
 import * as math from 'mathjs';
 import { useCollectionManager } from '../../../collection-manager/hooks';
 import { hasIcon, Icon, icons } from '../../../icon';
+import { DataSourceContext } from '../../../collection-manager/sub-table';
 
 const AntdFormulaInput = (props) => {
-  const { value, onChange, supports } = props;
+  const { value, onChange, supports, useCurrentFields } = props;
+  console.log('p', props);
   const field = useField<Field>();
   const { t } = useTranslation();
-  const record = useRecord();
-  const { getCollectionFields } = useCollectionManager();
-  const fields = getCollectionFields(record.collectionName || record.name) as any[];
+  const fields = useCurrentFields();
+  // const record = useRecord();
+  // const { getCollectionFields } = useCollectionManager();
+  // const fields = getCollectionFields(record.collectionName || record.name) as any[];
+
+  // const ctx = useContext(DataSourceContext);
+  // console.log('c', field, ctx, fields, record);
 
   const inputRef = useRef();
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -122,7 +128,9 @@ const AntdFormulaInput = (props) => {
 
 export const FormulaInput = connect(
   AntdFormulaInput,
-  mapProps(),
+  mapProps({
+    dataSource: 'fields',
+  }),
 );
 
 export default FormulaInput;
